@@ -1,40 +1,36 @@
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchNews } from '../store/FetchNews';
 import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Featured from './Featured';
 import Latest from './Latest';
+import { fetchNews } from '../store/FetchNews';
+
+
 
 export default function Home({ navigation }) {
+    // console.log("navigation", navigation)
     const dispatch = useDispatch();
-    const news = useSelector(state => state.News.data);
     const [userEmail, setUserEmail] = useState('');
     const [query, setQuery] = useState('');
-    const [filteredData, setFilteredData] = useState([]);
     const [tabIndex, setTabIndex] = useState(0);
 
     useEffect(() => {
-        dispatch(fetchNews());
+        // dispatch(fetchNews());
         const getEmail = async () => {
             const email = await AsyncStorage.getItem('userEmail');
             setUserEmail(email);
         };
         getEmail();
-    }, [dispatch]);
+    }, [dispatch, navigation]);
 
-    useEffect(() => {
-        const filtered = query.length > 0
-            ? news.articles?.filter(item => item.title.toLowerCase().includes(query.toLowerCase())) || []
-            : news.articles || [];
-        setFilteredData(filtered);
-    }, [query, news]);
+
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                <TouchableOpacity onPress={() => navigation?.openDrawer()}>
                     <Icon name="menu" size={30} color="#333" />
                 </TouchableOpacity>
                 <View style={styles.avatar}>
@@ -72,10 +68,6 @@ export default function Home({ navigation }) {
                 tabIndex === 0 ? <Featured query={query} /> :
                     <Latest query={query} />
             }
-
-
-
-
         </View>
     );
 }

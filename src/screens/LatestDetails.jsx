@@ -1,31 +1,12 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 
-export default function NewsDetails({ route }) {
+export default function LatestDetails({ route }) {
     const { id } = route.params;
     const news = useSelector(state => state.News.data.articles) || [];
-    const filteredArticles = news.filter(item => item.urlToImage);
 
-    const countArticlesPerAuthor = (articles) => {
-        const authorCounts = {};
-        articles.forEach(article => {
-            const author = article.author || "Unknown Author";
-            authorCounts[author] = (authorCounts[author] || 0) + 1;
-        });
-        return authorCounts;
-    };
-
-    const sortedArticles = (articles) => {
-        const authorCounts = countArticlesPerAuthor(articles);
-        return articles.sort((a, b) => {
-            const authorA = a.author || "Unknown Author";
-            const authorB = b.author || "Unknown Author";
-            return authorCounts[authorB] - authorCounts[authorA];
-        });
-    };
-
-    const sortedFilteredArticles = sortedArticles(filteredArticles);
-    const newsItem = sortedFilteredArticles[id];
+    const sortedArticles = [...news].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+    const newsItem = sortedArticles[id];
 
     return (
         <ScrollView style={styles.container}>

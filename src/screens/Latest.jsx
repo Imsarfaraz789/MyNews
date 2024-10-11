@@ -3,10 +3,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
-
 export default function Latest({ query }) {
     const news = useSelector(state => state.News.data.articles) || [];
-    const navigation = useNavigation()
+    const navigation = useNavigation();
 
     const filterArticlesByQuery = (articles, query) => {
         if (!query) return articles;
@@ -16,7 +15,6 @@ export default function Latest({ query }) {
     };
 
     const sortedArticles = [...news].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
     const filteredArticles = filterArticlesByQuery(sortedArticles, query);
 
     return (
@@ -36,16 +34,16 @@ export default function Latest({ query }) {
                         ) : (
                             <View style={styles.placeholder} />
                         )}
-                        <TouchableOpacity onPress={() => navigation.navigate('NewsDetails', { id: index })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('LatestDetails', { id: sortedArticles.indexOf(item) })}>
                             <Text numberOfLines={2} style={styles.title}>
                                 {item.title}
                             </Text>
                             <Text style={styles.date}>{item.publishedAt.split("T")[0]}</Text>
-                            <Text style={styles.author}>{item.author || "Unknown Author"}</Text>
+                            <Text style={styles.author}>{item.author ? item.author.split(",")[0] : "Unknown Author"}</Text>
                         </TouchableOpacity>
                     </View>
                 )}
-                keyExtractor={(item) => item.title}
+                keyExtractor={(item) => item.url}
             />
         </View>
     );

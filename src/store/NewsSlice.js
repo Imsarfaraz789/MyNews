@@ -5,7 +5,7 @@ const NewsSlice = createSlice({
     name: 'news',
     initialState: {
         data: {
-            articles: [], // Change this to an object with an articles array
+            articles: [],
         },
         isLoader: false,
         isError: false,
@@ -17,7 +17,7 @@ const NewsSlice = createSlice({
             })
             .addCase(fetchNews.fulfilled, (state, action) => {
                 state.isLoader = false;
-                state.data = action.payload; 
+                state.data = action.payload;
             })
             .addCase(fetchNews.rejected, state => {
                 state.isLoader = false;

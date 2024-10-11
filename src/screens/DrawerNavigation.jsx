@@ -6,6 +6,8 @@ import Login from './Login';
 import Register from './Register';
 import NewsDetails from './NewsDetails';
 import Profile from './Profile';
+import LatestDetails from './LatestDetails';
+import AuthorBlogs from './AuthorBlogs ';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,7 +25,9 @@ const DrawerNavigation = () => {
             <Drawer.Screen name='Login' component={Login} options={{ headerShown: false }} />
             <Drawer.Screen name='Register' component={Register} options={{ headerShown: false }} />
             <Drawer.Screen name='NewsDetails' component={NewsDetails} options={{ headerShown: false }} />
-            <Drawer.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+            <Drawer.Screen name="Profile" component={Profile} />
+            <Drawer.Screen name="LatestDetails" component={LatestDetails} options={{ headerShown: false }} />
+            <Drawer.Screen name="AuthorBlogs" component={AuthorBlogs} />
         </Drawer.Navigator>
     );
 };

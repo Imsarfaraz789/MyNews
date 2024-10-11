@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const RootNavigation = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(null);
 
+
     useEffect(() => {
         const checkLoginStatus = async () => {
             try {

@@ -59,11 +59,11 @@ export default function Featured({ query }) {
                                 {item.title}
                             </Text>
                             <Text style={styles.date}>{item.publishedAt.split("T")[0]}</Text>
-                            <Text style={styles.author}>{item.author || "Unknown Author"}</Text>
+                            <Text style={styles.author}>{item.author ? item.author.split(",")[0] : "Unknown Author"}</Text>
                         </TouchableOpacity>
                     </View>
                 )}
-                keyExtractor={(item) => item.title}
+                keyExtractor={(item) => item.url}
             />
         </View>
     );
