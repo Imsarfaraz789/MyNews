@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { useSelector } from 'react-redux';
 
-const CustomDrawerContent = ({ navigation }) => {
-    const news = useSelector(state => state.News.data.articles) || [];
+const CustomDrawerContent = ({ navigation, setIsLoggedIn }) => {
+    const news = useSelector((state) => state.News.data.articles) || [];
+
     const [selectedAuthor, setSelectedAuthor] = useState('');
 
-    const uniqueAuthors = Array.from(new Set(news.map(article => article.author || "Unknown Author")));
+    const uniqueAuthors = Array.from(new Set(news.map((article) => article.author || 'Unknown Author')));
 
     const handleLogout = async () => {
         try {
-            await AsyncStorage.removeItem('isLogedIn');
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Login' }],
-            });
+            await AsyncStorage.removeItem('isLoggedIn');
+            setIsLoggedIn(false);
+            navigation.navigate('Login');
         } catch (error) {
-            console.error("Failed to log out", error);
+            console.error('Failed to log out', error);
         }
     };
 
@@ -30,10 +29,15 @@ const CustomDrawerContent = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Menu</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <Text style={styles.buttonText}>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
+
+            <TouchableOpacity style={styles.button} onPress={() => {
+                console.log('Navigating to Profile');
+                navigation.navigate('Profile');
+            }}>
                 <Text style={styles.buttonText}>Profile</Text>
             </TouchableOpacity>
 
@@ -60,40 +64,26 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
     },
-    button: {
-        marginBottom: 20,
-        color: "#333"
-    },
     buttonText: {
         fontSize: 18,
-        marginTop: 20,
+        marginVertical: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
-    },
-    dropdownLabel: {
-        marginTop: 10,
-        fontSize: 18,
-        fontWeight: 'bold',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-
+        color: '#333',
     },
     picker: {
         height: 50,
         width: '100%',
-        marginVertical: 10,
+        marginBottom: 20,
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
     },
     logoutButton: {
         paddingVertical: 15,
@@ -103,6 +93,7 @@ const styles = StyleSheet.create({
     logoutText: {
         fontWeight: 'bold',
         fontSize: 18,
+        color: 'red',
     },
 });
 

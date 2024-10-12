@@ -1,10 +1,8 @@
 import { StyleSheet, Text, View, Image, TextInput, ScrollView, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native';
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 
-export default function Login() {
-    const navigation = useNavigation()
+export default function Login({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -19,18 +17,26 @@ export default function Login() {
                 const storeEmail = await AsyncStorage.getItem('userEmail');
                 const storePassword = await AsyncStorage.getItem('userPassword');
 
-                if (storeEmail?.trim().toLowerCase() === email.trim().toLowerCase() && storePassword?.trim() === password) {
-                    await AsyncStorage.setItem("isLogedIn", "true");
-                    Alert.alert("Login Success", "Login successfully");
-                    navigation.navigate("Home");
+                // Check if both email and password exist in AsyncStorage
+                if (storeEmail && storePassword) {
+                    if (
+                        storeEmail.trim().toLowerCase() === email.trim().toLowerCase() &&
+                        storePassword.trim() === password.trim()
+                    ) {
+                        await AsyncStorage.setItem("isLoggedIn", "true");
+                        Alert.alert("Login Success", "Login successfully");
+                        navigation.navigate("Home"); 
+                    } else {
+                        Alert.alert("Login Failed", "Incorrect email or password.");
+                    }
                 } else {
-                    Alert.alert("Failed", "User login failed");
+                    Alert.alert("Login Failed", "No registered user found.");
                 }
             } catch (error) {
-                Alert.alert("Error", "Failed to load data");
+                Alert.alert("Error", "Failed to load user data.");
             }
         } else {
-            Alert.alert("Login failed", "Please enter a valid email and a password should be greater than 3.");
+            Alert.alert("Login failed", "Please enter a valid email and a password with at least 3 characters.");
         }
     };
 
@@ -39,7 +45,7 @@ export default function Login() {
             <KeyboardAvoidingView behavior='position' style={{ flex: 1 }}>
                 <Image style={styles.image} source={require("../../assets/getting-started.jpg")} />
                 <View style={styles.container}>
-                    <Text style={styles.texHeading}>Login</Text>
+                    <Text style={styles.textHeading}>Login</Text>
                     <TextInput
                         style={styles.inputBox}
                         placeholder='Enter Email'
@@ -59,8 +65,9 @@ export default function Login() {
                     <TouchableOpacity style={styles.button} onPress={handleLogin}>
                         <Text style={styles.buttonText}>Login</Text>
                     </TouchableOpacity>
-                    <Text style={styles.loginText}>Don't have an account?{" "}
-                        <Text style={styles.loginbtn} onPress={() => navigation.navigate("Register")}>Register</Text>
+                    <Text style={styles.loginText}>
+                        Don't have an account?{' '}
+                        <Text style={styles.loginBtn} onPress={() => navigation.navigate("Register")}>Register</Text>
                     </Text>
                 </View>
             </KeyboardAvoidingView>
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 50,
         marginBottom: 20,
     },
-    texHeading: {
+    textHeading: {
         fontSize: 28,
         fontWeight: "bold",
         textAlign: "center",
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
         color: "#333",
         fontSize: 16,
     },
-    loginbtn: {
+    loginBtn: {
         color: "blue",
         textDecorationLine: "underline",
         fontSize: 16,

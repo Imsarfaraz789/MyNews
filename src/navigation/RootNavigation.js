@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer } from '@react-navigation/native';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import AuthNavigation from "./AuthNavigation";
 import DrawerNavigation from '../screens/DrawerNavigation';
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RootNavigation = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(null);
-
+    const [email, setEmail] = useState("")
 
     useEffect(() => {
         const checkLoginStatus = async () => {
             try {
-                const loggedInStatus = await AsyncStorage.getItem('isLogedIn');
+                const loggedInStatus = await AsyncStorage.getItem('isLoggedIn');
+                const loginEmail = await AsyncStorage.getItem('userEmail');
+                setEmail(loginEmail)
                 setIsLoggedIn(loggedInStatus === 'true');
             } catch (error) {
-                console.error("Failed to load login status", error);
+                console.error('Failed to load login status', error);
                 setIsLoggedIn(false);
             }
         };
@@ -35,7 +36,7 @@ const RootNavigation = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <NavigationContainer>
-                {isLoggedIn ? <DrawerNavigation /> : <AuthNavigation />}
+                <DrawerNavigation isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} email={email} />
             </NavigationContainer>
         </GestureHandlerRootView>
     );
