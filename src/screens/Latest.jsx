@@ -43,7 +43,8 @@ export default function Latest({ query }) {
                         </TouchableOpacity>
                     </View>
                 )}
-                keyExtractor={(item) => item.url}
+                keyExtractor={(item) => `${item.url}-${item.publishedAt}`}
+
             />
         </View>
     );

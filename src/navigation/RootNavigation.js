@@ -13,8 +13,8 @@ const RootNavigation = () => {
         const checkLoginStatus = async () => {
             try {
                 const loggedInStatus = await AsyncStorage.getItem('isLoggedIn');
-                const loginEmail = await AsyncStorage.getItem('userEmail');
-                setEmail(loginEmail)
+                const userEmail = await AsyncStorage.getItem('userEmail');
+                setEmail(userEmail)
                 setIsLoggedIn(loggedInStatus === 'true');
             } catch (error) {
                 console.error('Failed to load login status', error);

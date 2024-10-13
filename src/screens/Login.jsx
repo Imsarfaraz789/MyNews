@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, TextInput, ScrollView, KeyboardAvoidingV
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -17,7 +17,6 @@ export default function Login({navigation}) {
                 const storeEmail = await AsyncStorage.getItem('userEmail');
                 const storePassword = await AsyncStorage.getItem('userPassword');
 
-                // Check if both email and password exist in AsyncStorage
                 if (storeEmail && storePassword) {
                     if (
                         storeEmail.trim().toLowerCase() === email.trim().toLowerCase() &&
@@ -25,7 +24,12 @@ export default function Login({navigation}) {
                     ) {
                         await AsyncStorage.setItem("isLoggedIn", "true");
                         Alert.alert("Login Success", "Login successfully");
-                        navigation.navigate("Home"); 
+                        navigation.reset({
+                            index: 0,
+                            routes: [{
+                                name: "Home"
+                            }]
+                        });
                     } else {
                         Alert.alert("Login Failed", "Incorrect email or password.");
                     }

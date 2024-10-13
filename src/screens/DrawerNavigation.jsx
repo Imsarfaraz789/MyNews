@@ -7,12 +7,17 @@ import Register from './Register';
 import NewsDetails from './NewsDetails';
 import LatestDetails from './LatestDetails';
 import Profile from './Profile';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
 import AuthorBlogs from './AuthorBlogs ';
 
 const Drawer = createDrawerNavigator();
 
-const DrawerNavigation = ({ isLoggedIn, setIsLoggedIn, email }) => {
+const DrawerNavigation = ({ isLoggedIn, setIsLoggedIn, email = "" }) => {
+    const navigation = useNavigation();
+    console.log("email:", email);
+
     return (
         <Drawer.Navigator
             drawerContent={(props) => (
@@ -28,7 +33,9 @@ const DrawerNavigation = ({ isLoggedIn, setIsLoggedIn, email }) => {
                         headerRight: () => {
                             return (
                                 <View style={styles.avatar}>
-                                    <Text style={styles.avatarText}>{email.charAt(0).toUpperCase()}</Text>
+                                    <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+                                        <Text style={styles.avatarText}>{email.charAt(0).toUpperCase()}</Text>
+                                    </TouchableOpacity>
                                 </View>
                             );
                         },
@@ -36,17 +43,26 @@ const DrawerNavigation = ({ isLoggedIn, setIsLoggedIn, email }) => {
                     <Drawer.Screen name="Profile" component={Profile} />
                     <Drawer.Screen name="NewsDetails" component={NewsDetails} />
                     <Drawer.Screen name="LatestDetails" component={LatestDetails} />
+                    <Drawer.Screen name="Register" component={Register} options={{ headerShown: false }} />
+                    <Drawer.Screen name="Login" component={Login} options={{ headerShown: false }} />
                     <Drawer.Screen name="AuthorBlogs" component={AuthorBlogs} />
                 </>
             ) : (
                 <>
                     <Drawer.Screen name="Login" component={Login} options={{ headerShown: false }} />
                     <Drawer.Screen name="Register" component={Register} options={{ headerShown: false }} />
-                    <Drawer.Screen name="Home" component={Home} />
                     <Drawer.Screen name="Profile" component={Profile} />
-                    <Drawer.Screen name="NewsDetails" component={NewsDetails} />
-                    <Drawer.Screen name="LatestDetails" component={LatestDetails} />
-                    <Drawer.Screen name="AuthorBlogs" component={AuthorBlogs} />
+                    <Drawer.Screen name="Home" component={Home} options={{
+                        headerRight: () => {
+                            return (
+                                <View style={styles.avatar}>
+                                    <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+                                        <Text style={styles.avatarText}>{email.charAt(0).toUpperCase()}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            );
+                        },
+                    }} />
                 </>
             )}
         </Drawer.Navigator>

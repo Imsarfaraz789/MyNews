@@ -41,16 +41,21 @@ export default function NewsDetails({ route }) {
                         <Text style={styles.imagePlaceholder}>Image not available</Text>
                     )}
                     <Text style={styles.title}>{newsItem.title}</Text>
-                    <Text style={styles.dateText}>{new Date(newsItem.publishedAt).toLocaleDateString() || 'No Date'}</Text>
-                    <View style={styles.authorContainer}>
-                        <Text style={styles.authorText}>{newsItem.author || 'Unknown Author'}</Text>
+                    <View style={styles.avatarContainer}>
+                        <View style={styles.avatar}>
+                            <Text style={styles.avatarText}>{newsItem.author ? newsItem.author.charAt(0).toUpperCase() : "U"}</Text>
+                        </View>
+                        <View style={styles.authorDetails}>
+                            <Text style={styles.author}>{newsItem.author || "Unknown Author"}</Text>
+                            <Text style={styles.date}>{newsItem.publishedAt.split("T")[0]}</Text>
+                        </View>
                     </View>
                     <View style={styles.descriptionContainer}>
                         <Text style={styles.description}>{newsItem.description || 'No Description Available'}</Text>
                     </View>
-                    <Text style={styles.content}>{newsItem.content || 'No Content Available'}</Text>
+                    <Text style={styles.contentText}>{newsItem.content || 'No Content Available'}</Text>
                     <TouchableOpacity onPress={() => Linking.openURL(newsItem.url)}>
-                        <Text style={{ fontWeight: "600", color: "blue", textDecorationLine: "underline", }}>Read More</Text>
+                        <Text style={styles.readMore}>Read More</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
@@ -63,23 +68,16 @@ export default function NewsDetails({ route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
         backgroundColor: '#f5f5f5',
     },
+
     content: {
-        backgroundColor: '#fff',
-        borderRadius: 8,
-        padding: 16,
-        elevation: 2,
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 4,
-        marginBottom: 20,
+        padding: 12,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 8,
+        marginBottom: 12,
         color: '#333',
         textTransform: "capitalize",
     },
@@ -88,15 +86,36 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginBottom: 4,
     },
-    authorContainer: {
-        backgroundColor: '#e1f5fe',
-        padding: 8,
-        borderRadius: 4,
+    avatarContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         marginVertical: 6,
     },
-    authorText: {
+    avatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#007bff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 10,
+    },
+    avatarText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    authorDetails: {
+        flex: 1,
+    },
+    author: {
         color: "#000",
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    date: {
+        color: "#ccc",
         fontSize: 12,
+        marginTop: 4,
     },
     descriptionContainer: {
         backgroundColor: '#ffe0b2',
@@ -109,7 +128,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 20,
     },
-    content: {
+    contentText: {
         color: "#333",
         fontSize: 14,
         marginTop: 10,
@@ -132,5 +151,11 @@ const styles = StyleSheet.create({
         height: 200,
         borderRadius: 4,
         marginBottom: 10,
+    },
+    readMore: {
+        fontWeight: "600",
+        color: "blue",
+        textDecorationLine: "underline",
+        marginTop: 10,
     },
 });

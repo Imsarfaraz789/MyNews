@@ -15,7 +15,7 @@ const CustomDrawerContent = ({ navigation, setIsLoggedIn }) => {
         try {
             await AsyncStorage.removeItem('isLoggedIn');
             setIsLoggedIn(false);
-            navigation.navigate('Login');
+            navigation.navigate('Login');  
         } catch (error) {
             console.error('Failed to log out', error);
         }
@@ -84,8 +84,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
+        color: "#ccc"
     },
     logoutButton: {
+        borderTopWidth: 1,
+        borderTopColor: "#ccc",
         paddingVertical: 15,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
@@ -95,6 +98,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'red',
     },
+    dropdownLabel: {
+        color: "#333"
+    }
 });
 
 export default CustomDrawerContent;
