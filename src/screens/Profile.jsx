@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    Alert,
-    TouchableOpacity,
-    BackHandler,
-} from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = ({ navigation }) => {
     const [email, setEmail] = useState('');
 
-    // Fetch user email from AsyncStorage on component mount
     useEffect(() => {
         const getUserInfo = async () => {
             const storedEmail = await AsyncStorage.getItem('userEmail');
@@ -21,24 +13,22 @@ const Profile = ({ navigation }) => {
         getUserInfo();
     }, []);
 
-    // Function to delete the account and navigate to Register
     const deleteAccount = async () => {
         try {
-            await AsyncStorage.removeItem('userEmail');
-            await AsyncStorage.removeItem('userPassword');
-            await AsyncStorage.removeItem('isLoggedIn');
+            // Delete the account
+            await AsyncStorage.multiRemove(['userEmail', 'userPassword', 'isLoggedIn']);
 
-            // Reset navigation stack to the Register screen
+            // Navigate to Login screen and reset stack
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'Register' }],
+                routes: [{ name: 'Login' }] // Change to navigate to Login screen
             });
         } catch (error) {
+            console.error("Error deleting account:", error);
             Alert.alert("Error", "Failed to delete account");
         }
     };
 
-    // Show confirmation popup before deleting the account
     const confirmDelete = () => {
         Alert.alert(
             "Confirm Deletion",
@@ -49,7 +39,6 @@ const Profile = ({ navigation }) => {
             ]
         );
     };
-
 
     return (
         <View style={styles.container}>

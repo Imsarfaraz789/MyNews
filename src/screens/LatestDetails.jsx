@@ -5,7 +5,6 @@ export default function LatestDetails({ route }) {
     const { id } = route.params;
     const news = useSelector(state => state.News.data.articles) || [];
 
-    // Sort articles by published date
     const sortedArticles = [...news].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
     const newsItem = sortedArticles[id];
 

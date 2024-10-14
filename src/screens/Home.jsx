@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import Featured from './Featured';
 import Latest from './Latest';
 import { useDispatch } from 'react-redux';
 import { fetchNews } from '../store/FetchNews';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
-export default function Home() {
+export default function Home({navigtion}) {
     const [query, setQuery] = useState('');
     const [tabIndex, setTabIndex] = useState(0);
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(fetchNews())
-    }, [])
+    const dispatch = useDispatch();
+    useFocusEffect(
+        React.useCallback(() => {
+            dispatch(fetchNews());
+        }, [navigtion])
+    );
 
     return (
         <View style={styles.container}>
-
-
             <TouchableOpacity>
                 <TextInput
                     style={styles.inputBox}
@@ -42,7 +42,7 @@ export default function Home() {
                 </TouchableOpacity>
             </View>
 
-            {tabIndex === 0 ? <Featured query={query} /> : <Latest query={query} />}
+            {tabIndex === 0 ? <Featured query={query}  /> : <Latest query={query} />}
         </View>
     );
 }
@@ -53,8 +53,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         backgroundColor: '#f5f5f5',
     },
-
-
     inputBox: {
         backgroundColor: '#fff',
         borderRadius: 5,

@@ -6,15 +6,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RootNavigation = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(null);
-    const [email, setEmail] = useState("")
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         const checkLoginStatus = async () => {
             try {
                 const loggedInStatus = await AsyncStorage.getItem('isLoggedIn');
-                const userEmail = await AsyncStorage.getItem('userEmail');
-                setEmail(userEmail)
                 setIsLoggedIn(loggedInStatus === 'true');
             } catch (error) {
                 console.error('Failed to load login status', error);
@@ -36,7 +33,7 @@ const RootNavigation = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <NavigationContainer>
-                <DrawerNavigation isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} email={email} />
+                <DrawerNavigation isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
             </NavigationContainer>
         </GestureHandlerRootView>
     );

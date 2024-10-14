@@ -8,8 +8,10 @@ export default function Latest({ query }) {
     const navigation = useNavigation();
 
     const filterArticlesByQuery = (articles, query) => {
+        const filteredArticles = news.filter(item => item.urlToImage);
+
         if (!query) return articles;
-        return articles.filter(article =>
+        return filteredArticles.filter(article =>
             article.title.toLowerCase().includes(query.toLowerCase())
         );
     };
