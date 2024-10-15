@@ -14,7 +14,7 @@ export default function Home({ navigtion }) {
     
     useFocusEffect(
         React.useCallback(() => {
-            dispatch(fetchNews());
+            // dispatch(fetchNews());
         }, [navigtion])
     );
 

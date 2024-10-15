@@ -14,14 +14,20 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getData, storeData } from '../utils/AsyncStorageUtils';
 import { Colors } from '../utils/Colors';
-
-
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 export default function Login({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+
+    useEffect(() => {
+        GoogleSignin.configure({
+            webClientId: '360049562558-1unlirvfmq4ra63mq19ior0pfikcnbct.apps.googleusercontent.com',
+            offlineAccess: true,
+        });
+    }, []);
 
     useEffect(() => {
         const backAction = () => {
@@ -51,6 +57,9 @@ export default function Login({ navigation }) {
     };
 
     const handleLogin = async () => {
+        setEmailError('');
+        setPasswordError('');
+
         if (validateEmail(email) && validatePassword(password)) {
             try {
                 const storedEmail = await getData('userEmail');
@@ -87,7 +96,28 @@ export default function Login({ navigation }) {
         }
     };
 
-
+    // const handleGoogleSignIn = async () => {
+    //     try {
+    //         await GoogleSignin.hasPlayServices();
+    //         const userInfo = await GoogleSignin.signIn();
+    //         console.log(userInfo); // Handle user info as needed
+    //         Alert.alert('Login Success', `Welcome ${userInfo.user.name}!`);
+    //         navigation.reset({
+    //             index: 0,
+    //             routes: [{ name: 'Home' }],
+    //         });
+    //     } catch (error) {
+    //         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    //             // User cancelled the sign-in flow
+    //             Alert.alert('Cancelled', 'Google Sign-In was cancelled.');
+    //         } else if (error.code === statusCodes.IN_PROGRESS) {
+    //             // Operation (e.g., sign-in) is in progress already
+    //             Alert.alert('In Progress', 'Sign-In is already in progress.');
+    //         } else {
+    //             Alert.alert('Error', 'Something went wrong. Please try again.');
+    //         }
+    //     }
+    // };
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -107,7 +137,10 @@ export default function Login({ navigation }) {
                             keyboardType="email-address"
                             placeholderTextColor={`${Colors.mediumGray}`}
                             value={email}
-                            onChangeText={setEmail}
+                            onChangeText={(text) => {
+                                setEmail(text);
+                                setEmailError(''); // Reset error on input
+                            }}
                         />
                     </View>
                     {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
@@ -120,7 +153,10 @@ export default function Login({ navigation }) {
                             secureTextEntry
                             placeholderTextColor={`${Colors.mediumGray}`}
                             value={password}
-                            onChangeText={setPassword}
+                            onChangeText={(text) => {
+                                setPassword(text);
+                                setPasswordError(''); // Reset error on input
+                            }}
                         />
                     </View>
                     {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
@@ -139,7 +175,9 @@ export default function Login({ navigation }) {
                         </Text>
                     </Text>
 
-
+                    <TouchableOpacity onPress={handleGoogleSignIn} style={styles.googleButton}>
+                        <Text style={styles.googleButtonText}>Sign In With Google</Text>
+                    </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
         </ScrollView>
@@ -183,8 +221,19 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     buttonText: { fontSize: 18, color: Colors.white, fontWeight: 'bold' },
-
     errorText: { color: Colors.red, fontSize: 14, marginBottom: 10 },
     loginText: { textAlign: 'center', color: Colors.black, fontSize: 16 },
     loginBtn: { color: Colors.blue, textDecorationLine: 'underline', fontSize: 16 },
+    googleButton: {
+        marginTop: 10,
+        paddingVertical: 15,
+        backgroundColor: Colors.lightGray,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    googleButtonText: {
+        color: Colors.black,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });
