@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -9,9 +9,10 @@ import {
     KeyboardAvoidingView,
     TouchableOpacity,
     Alert,
+    BackHandler
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { storeData } from '../utils/AsyncStorageUtils';
 
 export default function Register({ navigation }) {
     const [email, setEmail] = useState('');
@@ -19,19 +20,51 @@ export default function Register({ navigation }) {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
+    // Handle hardware back press
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert("Exit App", "Are you sure you want to exit?", [
+                {
+                    text: "Cancel",
+                    onPress: () => null,
+                    style: "cancel"
+                },
+                { text: "YES", onPress: () => BackHandler.exitApp() }
+            ]);
+            return true; // Prevent default back action
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove(); // Clean up event listener on unmount
+    }, []);
+
+    // Validate email format
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
 
+    // Validate password with regex
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
+    // Handle user registration
     const handleRegister = async () => {
         setEmailError('');
         setPasswordError('');
 
-        if (validateEmail(email) && password.length >= 3) {
+        // Check for valid email and password
+        if (validateEmail(email) && validatePassword(password)) {
             try {
-                await AsyncStorage.setItem('userEmail', email);
-                await AsyncStorage.setItem('userPassword', password);
+                await storeData('userEmail', email);
+                await storeData('userPassword', password);
+                await storeData('isLoggedIn', false); // Store logged-in state initially as false
                 Alert.alert('Success', 'User registered successfully');
 
                 setEmail('');
@@ -46,11 +79,12 @@ export default function Register({ navigation }) {
                 Alert.alert('Failed to save data');
             }
         } else {
+            // Set appropriate error messages
             if (!validateEmail(email)) {
                 setEmailError('Please enter a valid email.');
             }
-            if (password.length < 3) {
-                setPasswordError('Password must be at least 3 characters.');
+            if (!validatePassword(password)) {
+                setPasswordError('Password must be at least 8 characters long, contain at least one uppercase letter and one special character.');
             }
         }
     };
@@ -115,9 +149,9 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: 350,
-        borderBottomRightRadius: 50,
-        borderBottomLeftRadius: 50,
+        height: 410,
+        borderBottomRightRadius: 40,
+        borderBottomLeftRadius: 40,
         marginBottom: 20,
     },
     textHeading: {
@@ -163,7 +197,7 @@ const styles = StyleSheet.create({
     errorText: {
         color: 'red',
         fontSize: 14,
-        marginTop: 5,
+        marginBottom: 10,
     },
     loginText: {
         textAlign: 'center',

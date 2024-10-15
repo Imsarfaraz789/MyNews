@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -9,9 +9,16 @@ import {
     KeyboardAvoidingView,
     TouchableOpacity,
     Alert,
+    BackHandler,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { getData, storeData } from '../utils/AsyncStorageUtils';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+
+// Configure Google Sign-In
+GoogleSignin.configure({
+    webClientId: '346639608222-vgb5vvpvqh7g9bng25b7o9ncuogbm1an.apps.googleusercontent.com',
+});
 
 export default function Login({ navigation }) {
     const [email, setEmail] = useState('');
@@ -19,32 +26,53 @@ export default function Login({ navigation }) {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert("Exit App", "Are you sure you want to exit?", [
+                { text: "Cancel", onPress: () => null, style: "cancel" },
+                { text: "YES", onPress: () => BackHandler.exitApp() },
+            ]);
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove();
+    }, []);
+
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
+    };
+
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+        return passwordRegex.test(password);
     };
 
     const handleLogin = async () => {
         setEmailError('');
         setPasswordError('');
 
-        if (validateEmail(email) && password.length >= 3) {
+        if (validateEmail(email) && validatePassword(password)) {
             try {
-                const storedEmail = await AsyncStorage.getItem('userEmail');
-                const storedPassword = await AsyncStorage.getItem('userPassword');
+                const storedEmail = await getData('userEmail');
+                const storedPassword = await getData('userPassword');
 
                 if (storedEmail && storedPassword) {
                     if (
                         storedEmail.trim().toLowerCase() === email.trim().toLowerCase() &&
                         storedPassword.trim() === password.trim()
                     ) {
-                        await AsyncStorage.setItem('isLoggedIn', 'true');
+                        await storeData('isLoggedIn', true);
                         Alert.alert('Login Success', 'Logged in successfully.');
 
                         setEmail('');
                         setPassword('');
 
-                        // Use reset to avoid back navigation to Login
                         navigation.reset({
                             index: 0,
                             routes: [{ name: 'Home' }],
@@ -59,11 +87,33 @@ export default function Login({ navigation }) {
                 Alert.alert('Error', 'Failed to load user data.');
             }
         } else {
-            if (!validateEmail(email)) {
-                setEmailError('Please enter a valid email.');
-            }
-            if (password.length < 3) {
-                setPasswordError('Password must be at least 3 characters.');
+            if (!validateEmail(email)) setEmailError('Please enter a valid email.');
+            if (!validatePassword(password))
+                setPasswordError('Password must be at least 8 characters long, contain at least one uppercase letter, and one special character.');
+        }
+    };
+
+    const onGoogleButtonPress = async (navigation) => {
+        try {
+            const { idToken } = await GoogleSignin.signIn();
+            // Alert user with ID Token (for demo)
+            Alert.alert('Google Sign-In Successful', 'ID Token: ' + idToken);
+
+            // Simulate navigation on successful login
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home' }],
+            });
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                Alert.alert('Cancelled', 'Google Sign-In was cancelled.');
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                Alert.alert('Error', 'Google Sign-In in progress.');
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                Alert.alert('Error', 'Google Play Services not available.');
+            } else {
+                console.error('Google Sign-In Error:', error);
+                Alert.alert('Error', 'Failed to log in with Google.');
             }
         }
     };
@@ -96,7 +146,7 @@ export default function Login({ navigation }) {
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Enter Password"
-                            secureTextEntry={true}
+                            secureTextEntry
                             placeholderTextColor="#888"
                             value={password}
                             onChangeText={setPassword}
@@ -117,6 +167,14 @@ export default function Login({ navigation }) {
                             Register
                         </Text>
                     </Text>
+
+                    <TouchableOpacity
+                        style={styles.googleButton}
+                        onPress={() => onGoogleButtonPress(navigation)}
+                    >
+                        <Ionicons name="logo-google" size={24} color="#fff" style={styles.googleIcon} />
+                        <Text style={styles.buttonText}>Sign in with Google</Text>
+                    </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
         </ScrollView>
@@ -124,14 +182,12 @@ export default function Login({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 20,
-    },
+    container: { padding: 20 },
     image: {
         width: '100%',
-        height: 350,
-        borderBottomRightRadius: 50,
-        borderBottomLeftRadius: 50,
+        height: 410,
+        borderBottomRightRadius: 40,
+        borderBottomLeftRadius: 40,
         marginBottom: 20,
     },
     textHeading: {
@@ -150,16 +206,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         backgroundColor: 'white',
     },
-    icon: {
-        paddingHorizontal: 10,
-    },
-    inputBox: {
-        flex: 1,
-        height: 50,
-        fontSize: 16,
-        paddingHorizontal: 10,
-        color: '#000',
-    },
+    icon: { paddingHorizontal: 10 },
+    inputBox: { flex: 1, height: 50, fontSize: 16, paddingHorizontal: 10, color: '#000' },
     button: {
         width: '100%',
         backgroundColor: 'seagreen',
@@ -169,24 +217,18 @@ const styles = StyleSheet.create({
         elevation: 2,
         marginBottom: 10,
     },
-    buttonText: {
-        fontSize: 18,
-        color: 'white',
-        fontWeight: 'bold',
+    buttonText: { fontSize: 18, color: 'white', fontWeight: 'bold' },
+    googleButton: {
+        flexDirection: 'row',
+        backgroundColor: '#db4437',
+        paddingVertical: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        elevation: 2,
+        marginBottom: 10,
     },
-    errorText: {
-        color: 'red',
-        fontSize: 14,
-        marginTop: 5,
-    },
-    loginText: {
-        textAlign: 'center',
-        color: '#333',
-        fontSize: 16,
-    },
-    loginBtn: {
-        color: 'blue',
-        textDecorationLine: 'underline',
-        fontSize: 16,
-    },
+    googleIcon: { marginRight: 10 },
+    errorText: { color: 'red', fontSize: 14, marginBottom: 10 },
+    loginText: { textAlign: 'center', color: '#333', fontSize: 16 },
+    loginBtn: { color: 'blue', textDecorationLine: 'underline', fontSize: 16 },
 });

@@ -7,21 +7,25 @@ const Profile = ({ navigation }) => {
 
     useEffect(() => {
         const getUserInfo = async () => {
-            const storedEmail = await AsyncStorage.getItem('userEmail');
-            setEmail(storedEmail || 'No Email Found');
+            try {
+                const storedEmail = await AsyncStorage.getItem('userEmail');
+                setEmail(storedEmail || 'No Email Found');
+            } catch (error) {
+                console.error("Error retrieving user info:", error);
+                Alert.alert("Error", "Failed to retrieve user information");
+            }
         };
+
         getUserInfo();
     }, []);
 
     const deleteAccount = async () => {
         try {
-            // Delete the account
             await AsyncStorage.multiRemove(['userEmail', 'userPassword', 'isLoggedIn']);
 
-            // Navigate to Login screen and reset stack
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'Login' }] // Change to navigate to Login screen
+                routes: [{ name: 'Register' }],
             });
         } catch (error) {
             console.error("Error deleting account:", error);
@@ -32,7 +36,7 @@ const Profile = ({ navigation }) => {
     const confirmDelete = () => {
         Alert.alert(
             "Confirm Deletion",
-            "Are you sure you want to delete your account?",
+            "Are you sure you want to delete your account? This action cannot be undone.",
             [
                 { text: "Cancel", style: "cancel" },
                 { text: "Yes", onPress: deleteAccount }

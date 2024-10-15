@@ -4,9 +4,9 @@ import Featured from './Featured';
 import Latest from './Latest';
 import { useDispatch } from 'react-redux';
 import { fetchNews } from '../store/FetchNews';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
-export default function Home({navigtion}) {
+export default function Home({ navigtion }) {
     const [query, setQuery] = useState('');
     const [tabIndex, setTabIndex] = useState(0);
     const dispatch = useDispatch();
@@ -42,7 +42,7 @@ export default function Home({navigtion}) {
                 </TouchableOpacity>
             </View>
 
-            {tabIndex === 0 ? <Featured query={query}  /> : <Latest query={query} />}
+            {tabIndex === 0 ? <Featured query={query} /> : <Latest query={query} />}
         </View>
     );
 }

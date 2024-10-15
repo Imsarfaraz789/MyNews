@@ -1,16 +1,24 @@
-import React from 'react'
-import RootNavigation from "./src/navigation/RootNavigation"
-import { Provider } from 'react-redux'
-import store from './src/store/Store'
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+
+import { Provider } from 'react-redux';
+import Store from './src/store/Store';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import DrawerNavigator from './src/navigation/DrawerNavigation';
+
 
 
 const App = () => {
   return (
-    <Provider store={store}>
+    <Provider store={Store}>
+      <GestureHandlerRootView>
 
-      <RootNavigation />
+        <NavigationContainer>
+          <DrawerNavigator />
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </Provider>
-  )
-}
+  );
+};
 
-export default App
+export default App;

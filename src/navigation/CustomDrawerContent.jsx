@@ -4,14 +4,13 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
-    Alert,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { useSelector } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { removeData } from '../utils/AsyncStorageUtils';
 
-const CustomDrawerContent = ({ navigation, setIsLoggedIn }) => {
+const CustomDrawerContent = ({ navigation }) => {
     const news = useSelector((state) => state.News.data.articles) || [];
     const [selectedAuthor, setSelectedAuthor] = useState('');
 
@@ -19,10 +18,7 @@ const CustomDrawerContent = ({ navigation, setIsLoggedIn }) => {
 
     const handleLogout = async () => {
         try {
-            await AsyncStorage.removeItem('isLoggedIn');
-            await AsyncStorage.clear();
-            setIsLoggedIn(false);
-            Alert.alert('Logged Out', 'You have successfully logged out.');
+            await removeData('isLoggedIn');
             navigation.navigate('Login');
         } catch (error) {
             console.error('Failed to log out', error);
@@ -36,21 +32,18 @@ const CustomDrawerContent = ({ navigation, setIsLoggedIn }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Menu</Text>
+            <Text style={styles.title}>News</Text>
 
-            {/* Home Button */}
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home')}>
                 <Ionicons name="home-outline" size={22} color="#555" style={styles.icon} />
                 <Text style={styles.buttonText}>Home</Text>
             </TouchableOpacity>
 
-            {/* Profile Button */}
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Profile')}>
                 <Ionicons name="person-outline" size={22} color="#555" style={styles.icon} />
                 <Text style={styles.buttonText}>Profile</Text>
             </TouchableOpacity>
 
-            {/* Author Dropdown */}
             <Text style={styles.dropdownLabel}>Select Author:</Text>
             <View style={styles.pickerContainer}>
                 <Picker
@@ -65,7 +58,6 @@ const CustomDrawerContent = ({ navigation, setIsLoggedIn }) => {
                 </Picker>
             </View>
 
-            {/* Logout Button */}
             <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                 <Ionicons name="log-out-outline" size={22} color="red" style={styles.icon} />
                 <Text style={styles.logoutText}>Logout</Text>
@@ -78,12 +70,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#ffffff',
     },
     title: {
-        fontSize: 24,
+        fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 30,
         color: '#333',
     },
     menuItem: {
@@ -91,21 +83,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
+        borderBottomColor: '#eee',
     },
     icon: {
         marginRight: 15,
     },
     buttonText: {
-        fontSize: 18,
+        fontSize: 20,
         color: '#333',
     },
     pickerContainer: {
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 5,
-        marginBottom: 20,
-        backgroundColor: 'white',
+        borderRadius: 8,
+        marginBottom: 30,
+        backgroundColor: '#fff',
     },
     picker: {
         height: 50,
@@ -115,18 +107,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderTopWidth: 1,
-        borderTopColor: '#ddd',
+        borderTopColor: '#eee',
         paddingVertical: 15,
         marginTop: 20,
     },
     logoutText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'red',
         marginLeft: 15,
     },
     dropdownLabel: {
-        fontSize: 16,
+        fontSize: 18,
         color: '#333',
         marginBottom: 5,
     },
