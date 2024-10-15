@@ -11,6 +11,7 @@ export default function Home({ navigtion }) {
     const [query, setQuery] = useState('');
     const [tabIndex, setTabIndex] = useState(0);
     const dispatch = useDispatch();
+    
     useFocusEffect(
         React.useCallback(() => {
             dispatch(fetchNews());

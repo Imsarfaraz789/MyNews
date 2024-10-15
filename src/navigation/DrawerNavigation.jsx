@@ -51,12 +51,14 @@ const DrawerNavigator = () => {
                     <Drawer.Screen name="Login" component={Login} options={{ headerShown: false }} />
                     <Drawer.Screen name="Profile" component={Profile} />
                     <Drawer.Screen name="AuthorBlogs" component={AuthorBlogs} />
+                    <Drawer.Screen name="NewsDetails" component={NewsDetails} />
+                    <Drawer.Screen name="LatestDetails" component={LatestDetails} />
 
                     <Drawer.Screen name="Home" component={Home}
                         options={{
                             headerRight: () => (
                                 <View style={styles.avatar}>
-                                    <Text style={styles.avatarText}>{email.charAt(0).toUpperCase() || '?'}</Text>
+                                    <Text style={styles.avatarText}>{email?.charAt(0).toUpperCase() || '?'}</Text>
                                 </View>
                             ),
                         }}
@@ -68,7 +70,7 @@ const DrawerNavigator = () => {
                         options={{
                             headerRight: () => (
                                 <View style={styles.avatar}>
-                                    <Text style={styles.avatarText}>{email.charAt(0).toUpperCase() || '?'}</Text>
+                                    <Text style={styles.avatarText}>{email?.charAt(0).toUpperCase() || '?'}</Text>
                                 </View>
                             ),
                         }} />

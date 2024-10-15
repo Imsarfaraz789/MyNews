@@ -1,5 +1,7 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Linking } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Linking, BackHandler } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { Colors } from '../utils/Colors';
 
 
@@ -7,6 +9,7 @@ export default function NewsDetails({ route }) {
     const { id } = route.params;
     const news = useSelector(state => state.News.data.articles) || [];
     const filteredArticles = news.filter(item => item.urlToImage);
+    const navigation = useNavigation();
 
     const countArticlesPerAuthor = (articles) => {
         const authorCounts = {};
@@ -29,8 +32,20 @@ export default function NewsDetails({ route }) {
     const sortedFilteredArticles = sortedArticles(filteredArticles);
     const newsItem = sortedFilteredArticles[id];
 
+    useEffect(() => {
+        const backAction = () => {
+            navigation.navigate('Home');
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+        return () => backHandler.remove();
+    }, [navigation]);
+
     return (
         <ScrollView style={styles.container}>
+
             {newsItem ? (
                 <View style={styles.content}>
                     {newsItem.urlToImage ? (
@@ -43,21 +58,23 @@ export default function NewsDetails({ route }) {
                         <Text style={styles.imagePlaceholder}>Image not available</Text>
                     )}
                     <Text style={styles.title}>{newsItem.title}</Text>
-                    <View style={styles.avatarContainer}>
+                    <View style={styles.authorContainer}>
                         <View style={styles.avatar}>
                             <Text style={styles.avatarText}>{newsItem.author ? newsItem.author.charAt(0).toUpperCase() : "U"}</Text>
                         </View>
                         <View style={styles.authorDetails}>
-                            <Text style={styles.author}>{newsItem.author || "Unknown Author"}</Text>
-                            <Text style={styles.date}>{newsItem.publishedAt.split("T")[0]}</Text>
+                            <Text style={styles.authorText}>{newsItem.author || 'Unknown Author'}</Text>
+                            <Text style={styles.dateText}>{new Date(newsItem.publishedAt).toLocaleDateString() || 'No Date'}</Text>
                         </View>
                     </View>
+
+
                     <View style={styles.descriptionContainer}>
                         <Text style={styles.description}>{newsItem.description || 'No Description Available'}</Text>
                     </View>
                     <Text style={styles.contentText}>{newsItem.content || 'No Content Available'}</Text>
                     <TouchableOpacity onPress={() => Linking.openURL(newsItem.url)}>
-                        <Text style={styles.readMore}>Read More</Text>
+                        <Text style={{ fontWeight: "600", color: "blue", textDecorationLine: "underline", }}>Read More</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
@@ -72,7 +89,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.background,
     },
-
     content: {
         padding: 12,
     },
@@ -84,37 +100,7 @@ const styles = StyleSheet.create({
         textTransform: "capitalize",
     },
     dateText: {
-        fontSize: 12,
-        marginBottom: 4,
-    },
-    avatarContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 6,
-    },
-    avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: Colors.avatarbackground,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 10,
-    },
-    avatarText: {
-        color: Colors.white,
-        fontWeight: 'bold',
-    },
-    authorDetails: {
-        flex: 1,
-    },
-    author: {
-        color: Colors.lightBlack,
-        fontSize: 14,
-        fontWeight: 'bold',
-    },
-    date: {
-        color: Colors.black,
+        color: Colors.mediumGray,
         fontSize: 12,
         marginTop: 4,
     },
@@ -137,7 +123,7 @@ const styles = StyleSheet.create({
     },
     error: {
         fontSize: 18,
-        color: 'red',
+        color: Colors.red,
         textAlign: 'center',
         marginTop: 20,
     },
@@ -152,6 +138,32 @@ const styles = StyleSheet.create({
         height: 200,
         borderRadius: 4,
         marginBottom: 10,
+    },
+    authorContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 8,
+    },
+    avatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: Colors.avatarbackground,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 10,
+    },
+    avatarText: {
+        color: Colors.white,
+        fontWeight: 'bold',
+    },
+    authorDetails: {
+        flex: 1,
+    },
+    authorText: {
+        color: Colors.lightBlack,
+        fontSize: 14,
+        fontWeight: 'bold',
     },
     readMore: {
         fontWeight: "600",

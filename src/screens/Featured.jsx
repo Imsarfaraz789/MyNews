@@ -10,7 +10,6 @@ export default function Featured({ query }) {
     const news = useSelector(state => state.News.data.articles) || [];
     const navigation = useNavigation()
     const filteredArticles = news.filter(item => item.urlToImage);
-    const isLoader = useSelector(state => state.News.isLoader);
 
 
 

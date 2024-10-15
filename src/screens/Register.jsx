@@ -17,7 +17,7 @@ import { Colors } from '../utils/Colors';
 
 export default function Register({ navigation }) {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState('');  
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 

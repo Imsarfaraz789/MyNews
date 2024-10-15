@@ -9,15 +9,16 @@ export default function Latest({ query }) {
     const navigation = useNavigation();
 
     const filterArticlesByQuery = (articles, query) => {
-        const filteredArticles = news.filter(item => item.urlToImage);
+        const filteredArticles = articles.filter(item => item.urlToImage);
 
-        if (!query) return articles;
+        if (!query) return filteredArticles;
         return filteredArticles.filter(article =>
             article.title.toLowerCase().includes(query.toLowerCase())
         );
     };
 
     const sortedArticles = [...news].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
     const filteredArticles = filterArticlesByQuery(sortedArticles, query);
 
     return (
