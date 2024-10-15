@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Linking } from 'react-native';
 import { useSelector } from 'react-redux';
+import { Colors } from '../utils/Colors';
+
 
 export default function NewsDetails({ route }) {
     const { id } = route.params;
@@ -68,7 +70,7 @@ export default function NewsDetails({ route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: Colors.background,
     },
 
     content: {
@@ -78,11 +80,10 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 12,
-        color: '#333',
+        color: Colors.black,
         textTransform: "capitalize",
     },
     dateText: {
-        color: "#888",
         fontSize: 12,
         marginBottom: 4,
     },
@@ -95,41 +96,41 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#007bff',
+        backgroundColor: Colors.avatarbackground,
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 10,
     },
     avatarText: {
-        color: '#fff',
+        color: Colors.white,
         fontWeight: 'bold',
     },
     authorDetails: {
         flex: 1,
     },
     author: {
-        color: "#000",
+        color: Colors.lightBlack,
         fontSize: 14,
         fontWeight: 'bold',
     },
     date: {
-        color: "#ccc",
+        color: Colors.black,
         fontSize: 12,
         marginTop: 4,
     },
     descriptionContainer: {
-        backgroundColor: '#ffe0b2',
+        backgroundColor: Colors.descriptionbackground,
         padding: 8,
         borderRadius: 4,
         marginVertical: 6,
     },
     description: {
-        color: "#444",
+        color: Colors.darkGray,
         fontSize: 14,
         lineHeight: 20,
     },
     contentText: {
-        color: "#333",
+        color: Colors.black,
         fontSize: 14,
         marginTop: 10,
         lineHeight: 20,
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     imagePlaceholder: {
-        color: "#888",
+        color: Colors.mediumGray,
         fontSize: 16,
         textAlign: 'center',
         marginBottom: 10,
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     },
     readMore: {
         fontWeight: "600",
-        color: "blue",
+        color: Colors.blue,
         textDecorationLine: "underline",
         marginTop: 10,
     },

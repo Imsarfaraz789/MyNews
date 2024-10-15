@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { storeData } from '../utils/AsyncStorageUtils';
+import { Colors } from '../utils/Colors';
 
 export default function Register({ navigation }) {
     const [email, setEmail] = useState('');
@@ -20,7 +21,6 @@ export default function Register({ navigation }) {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
-    // Handle hardware back press
     useEffect(() => {
         const backAction = () => {
             Alert.alert("Exit App", "Are you sure you want to exit?", [
@@ -31,7 +31,7 @@ export default function Register({ navigation }) {
                 },
                 { text: "YES", onPress: () => BackHandler.exitApp() }
             ]);
-            return true; // Prevent default back action
+            return true;
         };
 
         const backHandler = BackHandler.addEventListener(
@@ -39,38 +39,31 @@ export default function Register({ navigation }) {
             backAction
         );
 
-        return () => backHandler.remove(); // Clean up event listener on unmount
+        return () => backHandler.remove();
     }, []);
 
-    // Validate email format
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
 
-    // Validate password with regex
     const validatePassword = (password) => {
         const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
         return passwordRegex.test(password);
     };
 
-    // Handle user registration
     const handleRegister = async () => {
-        setEmailError('');
-        setPasswordError('');
-
-        // Check for valid email and password
+        
         if (validateEmail(email) && validatePassword(password)) {
             try {
                 await storeData('userEmail', email);
                 await storeData('userPassword', password);
-                await storeData('isLoggedIn', false); // Store logged-in state initially as false
+                await storeData('isLoggedIn', false);
                 Alert.alert('Success', 'User registered successfully');
 
                 setEmail('');
                 setPassword('');
 
-                // Reset navigation to the Login screen
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'Login' }],
@@ -79,7 +72,6 @@ export default function Register({ navigation }) {
                 Alert.alert('Failed to save data');
             }
         } else {
-            // Set appropriate error messages
             if (!validateEmail(email)) {
                 setEmailError('Please enter a valid email.');
             }
@@ -100,11 +92,11 @@ export default function Register({ navigation }) {
                     <Text style={styles.textHeading}>Create an Account</Text>
 
                     <View style={styles.inputContainer}>
-                        <Ionicons name="mail-outline" size={24} color="#888" style={styles.icon} />
+                        <Ionicons name="mail-outline" size={24} color={`${Colors.mediumGray}`} style={styles.icon} />
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Enter Email"
-                            placeholderTextColor="#888"
+                            placeholderTextColor={`${Colors.mediumGray}`}
                             value={email}
                             onChangeText={setEmail}
                         />
@@ -112,12 +104,12 @@ export default function Register({ navigation }) {
                     {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
                     <View style={styles.inputContainer}>
-                        <Ionicons name="lock-closed-outline" size={24} color="#888" style={styles.icon} />
+                        <Ionicons name="lock-closed-outline" size={24} color={`${Colors.mediumGray}`} style={styles.icon} />
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Enter Password"
                             secureTextEntry={true}
-                            placeholderTextColor="#888"
+                            placeholderTextColor={`${Colors.mediumGray}`}
                             value={password}
                             onChangeText={setPassword}
                         />
@@ -158,17 +150,17 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#333',
+        color: Colors.black,
         marginBottom: 20,
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderColor: '#ccc',
+        borderColor: Colors.softText,
         borderWidth: 1,
         borderRadius: 10,
         marginBottom: 10,
-        backgroundColor: 'white',
+        backgroundColor: Colors.white,
     },
     icon: {
         paddingHorizontal: 10,
@@ -178,7 +170,7 @@ const styles = StyleSheet.create({
         height: 50,
         fontSize: 16,
         paddingHorizontal: 10,
-        color: '#000',
+        color: Colors.lightBlack
     },
     button: {
         width: '100%',
@@ -191,21 +183,21 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 18,
-        color: 'white',
+        color: Colors.white,
         fontWeight: 'bold',
     },
     errorText: {
-        color: 'red',
+        color: Colors.red,
         fontSize: 14,
         marginBottom: 10,
     },
     loginText: {
         textAlign: 'center',
-        color: '#333',
+        color: Colors.black,
         fontSize: 16,
     },
     loginBtn: {
-        color: 'blue',
+        color: Colors.blue,
         textDecorationLine: 'underline',
         fontSize: 16,
     },

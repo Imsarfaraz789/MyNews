@@ -5,6 +5,7 @@ import Latest from './Latest';
 import { useDispatch } from 'react-redux';
 import { fetchNews } from '../store/FetchNews';
 import { useFocusEffect } from '@react-navigation/native';
+import { Colors } from '../utils/Colors';
 
 export default function Home({ navigtion }) {
     const [query, setQuery] = useState('');
@@ -23,7 +24,7 @@ export default function Home({ navigtion }) {
             <TouchableOpacity>
                 <TextInput
                     style={styles.inputBox}
-                    placeholderTextColor="#888"
+                    placeholderTextColor={`${Colors.mediumGray}`}
                     value={query}
                     onChangeText={(text) => setQuery(text)}
                     placeholder='Search News'
@@ -32,13 +33,13 @@ export default function Home({ navigtion }) {
 
             <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', padding: 8 }}>
                 <TouchableOpacity onPress={() => setTabIndex(0)}>
-                    <Text style={{ fontWeight: tabIndex === 0 ? 'bold' : '', fontSize: tabIndex === 0 ? 18 : 14, color: '#333' }}>
+                    <Text style={{ fontWeight: tabIndex === 0 ? 'bold' : '', fontSize: tabIndex === 0 ? 18 : 14, color: `${Colors.black}` }}>
                         Featured
                     </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => setTabIndex(1)}>
-                    <Text style={{ fontWeight: tabIndex === 1 ? 'bold' : '', fontSize: tabIndex === 1 ? 18 : 14, color: '#333' }}>
+                    <Text style={{ fontWeight: tabIndex === 1 ? 'bold' : '', fontSize: tabIndex === 1 ? 18 : 14, color: `${Colors.black}` }}>
                         Latest
                     </Text>
                 </TouchableOpacity>
@@ -53,10 +54,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 16,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: Colors.background,
     },
     inputBox: {
-        backgroundColor: '#fff',
+        backgroundColor: Colors.white,
         borderRadius: 5,
         paddingVertical: 10,
         paddingHorizontal: 15,

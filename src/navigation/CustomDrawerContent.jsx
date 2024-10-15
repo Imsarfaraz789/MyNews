@@ -9,6 +9,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { removeData } from '../utils/AsyncStorageUtils';
+import { Colors } from '../utils/Colors';
 
 const CustomDrawerContent = ({ navigation }) => {
     const news = useSelector((state) => state.News.data.articles) || [];
@@ -35,12 +36,12 @@ const CustomDrawerContent = ({ navigation }) => {
             <Text style={styles.title}>News</Text>
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Home')}>
-                <Ionicons name="home-outline" size={22} color="#555" style={styles.icon} />
+                <Ionicons name="home-outline" size={22} color={`${Colors.iconColor}`} style={styles.icon} />
                 <Text style={styles.buttonText}>Home</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Profile')}>
-                <Ionicons name="person-outline" size={22} color="#555" style={styles.icon} />
+                <Ionicons name="person-outline" size={22} color={`${Colors.iconColor}`} style={styles.icon} />
                 <Text style={styles.buttonText}>Profile</Text>
             </TouchableOpacity>
 
@@ -59,7 +60,7 @@ const CustomDrawerContent = ({ navigation }) => {
             </View>
 
             <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Ionicons name="log-out-outline" size={22} color="red" style={styles.icon} />
+                <Ionicons name="log-out-outline" size={22} color={`${Colors.red}`} style={styles.icon} />
                 <Text style={styles.logoutText}>Logout</Text>
             </TouchableOpacity>
         </View>
@@ -70,34 +71,34 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#ffffff',
+        backgroundColor: Colors.white,
     },
     title: {
         fontSize: 28,
         fontWeight: 'bold',
         marginBottom: 30,
-        color: '#333',
+        color: Colors.black,
     },
     menuItem: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#eee',
+        borderBottomColor: Colors.borderButtomColor,
     },
     icon: {
         marginRight: 15,
     },
     buttonText: {
         fontSize: 20,
-        color: '#333',
+        color: Colors.black
     },
     pickerContainer: {
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: Colors.softText,
         borderRadius: 8,
         marginBottom: 30,
-        backgroundColor: '#fff',
+        backgroundColor: Colors.white
     },
     picker: {
         height: 50,
@@ -107,19 +108,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderTopWidth: 1,
-        borderTopColor: '#eee',
+        borderTopColor: Colors.borderButtomColor,
         paddingVertical: 15,
         marginTop: 20,
     },
     logoutText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'red',
+        color: Colors.red,
         marginLeft: 15,
     },
     dropdownLabel: {
         fontSize: 18,
-        color: '#333',
+        color: Colors.black,
         marginBottom: 5,
     },
 });

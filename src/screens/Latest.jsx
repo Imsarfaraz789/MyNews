@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { Colors } from '../utils/Colors';
 
 export default function Latest({ query }) {
     const news = useSelector(state => state.News.data.articles) || [];
@@ -61,11 +62,11 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 10,
         fontWeight: "bold",
-        color: "#333",
+        color: Colors.black,
         width: 240,
     },
     date: {
-        color: "#ccc",
+        color: Colors.softText,
         marginTop: 4,
         paddingHorizontal: 10,
     },
@@ -78,6 +79,6 @@ const styles = StyleSheet.create({
     placeholder: {
         width: 150,
         height: 80,
-        backgroundColor: '#ccc',
+        backgroundColor: Colors.softText,
     },
 });

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Colors } from '../utils/Colors';
 
 const Profile = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -9,6 +10,7 @@ const Profile = ({ navigation }) => {
         const getUserInfo = async () => {
             try {
                 const storedEmail = await AsyncStorage.getItem('userEmail');
+                
                 setEmail(storedEmail || 'No Email Found');
             } catch (error) {
                 console.error("Error retrieving user info:", error);
@@ -62,14 +64,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: Colors.background,
     },
     title: {
         fontSize: 28,
         fontWeight: 'bold',
         marginBottom: 30,
         textAlign: 'center',
-        color: '#333',
+        color: Colors.black,
     },
     infoContainer: {
         marginBottom: 40,
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
     },
     value: {
         fontSize: 18,
-        color: '#000',
+        color: Colors.lightBlack,
     },
     button: {
         backgroundColor: '#ff3b30',
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 18,
-        color: '#fff',
+        color: Colors.white,
         fontWeight: 'bold',
     },
 });

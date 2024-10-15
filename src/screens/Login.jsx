@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getData, storeData } from '../utils/AsyncStorageUtils';
+import { Colors } from '../utils/Colors';
 
 
 
@@ -50,9 +51,6 @@ export default function Login({ navigation }) {
     };
 
     const handleLogin = async () => {
-        setEmailError('');
-        setPasswordError('');
-
         if (validateEmail(email) && validatePassword(password)) {
             try {
                 const storedEmail = await getData('userEmail');
@@ -102,12 +100,12 @@ export default function Login({ navigation }) {
                     <Text style={styles.textHeading}>Login</Text>
 
                     <View style={styles.inputContainer}>
-                        <Ionicons name="mail-outline" size={24} color="#888" style={styles.icon} />
+                        <Ionicons name="mail-outline" size={24} color={`${Colors.mediumGray}`} style={styles.icon} />
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Enter Email"
                             keyboardType="email-address"
-                            placeholderTextColor="#888"
+                            placeholderTextColor={`${Colors.mediumGray}`}
                             value={email}
                             onChangeText={setEmail}
                         />
@@ -115,12 +113,12 @@ export default function Login({ navigation }) {
                     {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
                     <View style={styles.inputContainer}>
-                        <Ionicons name="lock-closed-outline" size={24} color="#888" style={styles.icon} />
+                        <Ionicons name="lock-closed-outline" size={24} color={`${Colors.mediumGray}`} style={styles.icon} />
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Enter Password"
                             secureTextEntry
-                            placeholderTextColor="#888"
+                            placeholderTextColor={`${Colors.mediumGray}`}
                             value={password}
                             onChangeText={setPassword}
                         />
@@ -161,20 +159,20 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#333',
+        color: Colors.black,
         marginBottom: 20,
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderColor: '#ccc',
+        borderColor: Colors.softText,
         borderWidth: 1,
         borderRadius: 10,
         marginBottom: 10,
-        backgroundColor: 'white',
+        backgroundColor: Colors.white,
     },
     icon: { paddingHorizontal: 10 },
-    inputBox: { flex: 1, height: 50, fontSize: 16, paddingHorizontal: 10, color: '#000' },
+    inputBox: { flex: 1, height: 50, fontSize: 16, paddingHorizontal: 10, color: Colors.lightBlack },
     button: {
         width: '100%',
         backgroundColor: 'seagreen',
@@ -184,9 +182,9 @@ const styles = StyleSheet.create({
         elevation: 2,
         marginBottom: 10,
     },
-    buttonText: { fontSize: 18, color: 'white', fontWeight: 'bold' },
+    buttonText: { fontSize: 18, color: Colors.white, fontWeight: 'bold' },
 
-    errorText: { color: 'red', fontSize: 14, marginBottom: 10 },
-    loginText: { textAlign: 'center', color: '#333', fontSize: 16 },
-    loginBtn: { color: 'blue', textDecorationLine: 'underline', fontSize: 16 },
+    errorText: { color: Colors.red, fontSize: 14, marginBottom: 10 },
+    loginText: { textAlign: 'center', color: Colors.black, fontSize: 16 },
+    loginBtn: { color: Colors.blue, textDecorationLine: 'underline', fontSize: 16 },
 });

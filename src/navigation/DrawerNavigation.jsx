@@ -10,6 +10,7 @@ import LatestDetails from '../screens/LatestDetails';
 import CustomDrawerContent from './CustomDrawerContent';
 import AuthorBlogs from '../screens/AuthorBlogs';
 import { View, ActivityIndicator, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { Colors } from '../utils/Colors';
 
 
 const Drawer = createDrawerNavigator();
@@ -49,6 +50,7 @@ const DrawerNavigator = () => {
                     <Drawer.Screen name="Register" component={Register} options={{ headerShown: false }} />
                     <Drawer.Screen name="Login" component={Login} options={{ headerShown: false }} />
                     <Drawer.Screen name="Profile" component={Profile} />
+                    <Drawer.Screen name="AuthorBlogs" component={AuthorBlogs} />
 
                     <Drawer.Screen name="Home" component={Home}
                         options={{
@@ -86,13 +88,13 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#007bff',
+        backgroundColor: Colors.avatarbackground,
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 10,
     },
     avatarText: {
-        color: '#fff',
+        color: Colors.white,
         fontWeight: 'bold',
     },
 });

@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
+import { Colors } from '../utils/Colors';
+
 
 const AuthorBlogs = ({ route }) => {
     const { author } = route.params;
@@ -33,12 +35,12 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
-        color: "#333"
+        color: Colors.black
     },
     articleContainer: {
         padding: 10,
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        borderBottomColor: Colors.softText,
     },
     articleTitle: {
         fontSize: 18,
