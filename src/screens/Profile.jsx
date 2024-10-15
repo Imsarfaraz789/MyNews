@@ -10,8 +10,7 @@ const Profile = ({ navigation }) => {
         const getUserInfo = async () => {
             try {
                 const storedEmail = await AsyncStorage.getItem('userEmail');
-                
-                setEmail(storedEmail || 'No Email Found');
+                  setEmail(storedEmail || 'No Email Found');
             } catch (error) {
                 console.error("Error retrieving user info:", error);
                 Alert.alert("Error", "Failed to retrieve user information");
