@@ -16,6 +16,8 @@ export default function Home({ navigtion }) {
         }, [navigtion])
     );
 
+
+
     return (
         <View style={styles.container}>
             <TouchableOpacity>

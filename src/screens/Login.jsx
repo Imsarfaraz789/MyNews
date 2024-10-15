@@ -13,12 +13,8 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getData, storeData } from '../utils/AsyncStorageUtils';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
-// Configure Google Sign-In
-GoogleSignin.configure({
-    webClientId: '346639608222-vgb5vvpvqh7g9bng25b7o9ncuogbm1an.apps.googleusercontent.com',
-});
+
 
 export default function Login({ navigation }) {
     const [email, setEmail] = useState('');
@@ -93,30 +89,7 @@ export default function Login({ navigation }) {
         }
     };
 
-    const onGoogleButtonPress = async (navigation) => {
-        try {
-            const { idToken } = await GoogleSignin.signIn();
-            // Alert user with ID Token (for demo)
-            Alert.alert('Google Sign-In Successful', 'ID Token: ' + idToken);
 
-            // Simulate navigation on successful login
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Home' }],
-            });
-        } catch (error) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                Alert.alert('Cancelled', 'Google Sign-In was cancelled.');
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                Alert.alert('Error', 'Google Sign-In in progress.');
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                Alert.alert('Error', 'Google Play Services not available.');
-            } else {
-                console.error('Google Sign-In Error:', error);
-                Alert.alert('Error', 'Failed to log in with Google.');
-            }
-        }
-    };
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -168,13 +141,7 @@ export default function Login({ navigation }) {
                         </Text>
                     </Text>
 
-                    <TouchableOpacity
-                        style={styles.googleButton}
-                        onPress={() => onGoogleButtonPress(navigation)}
-                    >
-                        <Ionicons name="logo-google" size={24} color="#fff" style={styles.googleIcon} />
-                        <Text style={styles.buttonText}>Sign in with Google</Text>
-                    </TouchableOpacity>
+
                 </View>
             </KeyboardAvoidingView>
         </ScrollView>
@@ -218,16 +185,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     buttonText: { fontSize: 18, color: 'white', fontWeight: 'bold' },
-    googleButton: {
-        flexDirection: 'row',
-        backgroundColor: '#db4437',
-        paddingVertical: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        elevation: 2,
-        marginBottom: 10,
-    },
-    googleIcon: { marginRight: 10 },
+
     errorText: { color: 'red', fontSize: 14, marginBottom: 10 },
     loginText: { textAlign: 'center', color: '#333', fontSize: 16 },
     loginBtn: { color: 'blue', textDecorationLine: 'underline', fontSize: 16 },
